@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golang-example
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: golang-example
+  template:
+    metadata:
+      labels:
+        app: golang-example
+    spec:
+      containers:
+        - name: golang-example
+          image: antonpatsev/golang-example:1
+          imagePullPolicy: Always
+          env:
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: golang-example-dsn
+                  key: dsn
+          ports:
+            - containerPort: 8080
